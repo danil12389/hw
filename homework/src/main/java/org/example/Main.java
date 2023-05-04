@@ -1,9 +1,12 @@
 package org.example;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,11 +23,13 @@ public class Main {
                 "Hi! I am Alex #alex #helloworld #me #hello"
         );
         List<String> result = new ArrayList<>();
-        posts.stream()
-                        .map(i -> i.split(""))
-        .filter(i -> Arrays.stream(i).allMatch(x -> x.substring(0).equals("#")))
-                .map(i -> result.add(i))
-         .forEach(System.out::println);
-        System.out.println(posts.size());
+        Map<String, String> counters = new HashMap<>();
+        var res = posts.stream()
+                        .flatMap(x -> Arrays.stream(x.split(" ")))
+                                .filter(x -> x.substring(0, 1).equals("#"))
+                                        .collect(groupingBy(Function.identity(),counting()));
+
+
+        System.out.println(res);
     }
 }
